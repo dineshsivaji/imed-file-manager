@@ -6,7 +6,14 @@ import { Editor, useMonaco } from '@monaco-editor/react';
 
 const { Option } = Select;
 
-const DynamicMonacoEditor = () => {
+interface DynamicMonacoEditorProps {
+  code: string;
+  setCode: (code: string) => void;
+}
+const DynamicMonacoEditor: React.FC<DynamicMonacoEditorProps> = ({
+  code,
+  setCode,
+}) => {
   const monaco = useMonaco();
   const editorRef = useRef(null);
   const [currentLanguage, setCurrentLanguage] = useState('javascript');
@@ -54,8 +61,9 @@ const DynamicMonacoEditor = () => {
     <Editor
       height="90vh"
       language={currentLanguage}
-      value={`// Current Language: ${currentLanguage}\nfunction hello() {\n  console.log('World!');\n}`}
+      value={code}
       options={{ selectOnLineNumbers: true }}
+      onChange={(v) => setCode(v ?? '')}
       //   editorDidMount={handleEditorDidMount}
     />
   );

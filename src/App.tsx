@@ -26,7 +26,7 @@ function App() {
 
   return (
     <div>
-      <TopLevelMenu />
+      <TopLevelMenu onOpenFile={openFileDialog} />
       {/* <form
         className="row"
         onSubmit={(e) => {
@@ -45,7 +45,7 @@ function App() {
         onChange={(v) => setCode(v ?? '')}
         theme="light"
       /> */}
-      <DynamicMonacoEditor />
+      <DynamicMonacoEditor code={code || ''} setCode={setCode} />
     </div>
   );
 }

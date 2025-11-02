@@ -13,15 +13,21 @@ import { useState } from 'react';
 import ModelWithInput from './ModelWithInput';
 import OkOnlyModal from './OkOnlyModal';
 
-const TopLevelMenu = () => {
+interface TopLevelMenuProps {
+  onOpenFile: () => void;
+}
+const TopLevelMenu: React.FC<TopLevelMenuProps> = ({ onOpenFile }) => {
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [showModal, setShowModal] = useState(false); // Modal visibility state
   const [isAboutVisible, setIsAboutVisible] = useState(false);
   const handleMenuClick = (e: any) => {
+    console.log('Menu item clicked:', e);
     if (e.key === 'encryptionKey') {
       setShowModal(true); // Show modal when encryptionKey is clicked
     } else if (e.key === 'about') {
       setIsAboutVisible(true); // Show about modal
+    } else if (e.key === 'open') {
+      onOpenFile(); // Call the passed function to open file dialog
     }
     clearSelection();
   };
