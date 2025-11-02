@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import './App.css';
 import Editor from '@monaco-editor/react';
-
+import TopLevelMenu from './components/ui/menu';
 function App() {
   const [greetMsg, setGreetMsg] = useState('');
   const [name, setName] = useState('');
-  const [code, setCode] = useState<string | null>('{}'); // editor content state
+  const [code, setCode] = useState<string | null>(''); // editor content state
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -24,8 +24,9 @@ function App() {
   }
 
   return (
-    <main className="container">
-      <form
+    <div>
+      <TopLevelMenu />
+      {/* <form
         className="row"
         onSubmit={(e) => {
           e.preventDefault();
@@ -33,8 +34,8 @@ function App() {
         }}
       >
         <button type="submit">Open</button>
-      </form>
-      <p>{greetMsg}</p>
+      </form> */}
+      {/* <p>{greetMsg}</p> */}
       {/*<FileTree path="/Users/hgd469/Downloads" />*/}
       <Editor
         height="90vh"
@@ -43,7 +44,7 @@ function App() {
         onChange={(v) => setCode(v ?? '')}
         theme="light"
       />
-    </main>
+    </div>
   );
 }
 
