@@ -7,41 +7,26 @@ import {
   SaveFilled,
   LockFilled,
 } from '@ant-design/icons';
-// import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { useState } from 'react';
 
-// type MenuItem = Required<MenuProps>['items'][number];
-
-// const items: MenuItem[] = [
-//   {
-//     label: 'File',
-//     key: 'SubMenu',
-//     icon: <FolderOpenFilled />,
-//     children: [
-//       {
-//         type: 'group',
-//         // label: 'Item 1',
-//         children: [
-//           { label: 'Open', key: 'setting:1', icon: <FileOutlined /> },
-//           { label: 'Save', key: 'setting:2', icon: <SaveOutlined /> },
-//         ],
-//       },
-//     ],
-//   },
-// ];
+import ModelWithInput from './ModelWithInput';
 
 const TopLevelMenu = () => {
-  const [selectedKeys, setSelectedKeys] = useState([]); // Initialize with an empty array
+  const [selectedKeys, setSelectedKeys] = useState([]);
+  const [showModal, setShowModal] = useState(false); // Modal visibility state
 
   const handleMenuClick = (e: any) => {
-    console.log('click ', e);
+    if (e.key === 'encryptionKey') {
+      setShowModal(true); // Show modal when encryptionKey is clicked
+    }
     clearSelection();
   };
 
   const clearSelection = () => {
-    setSelectedKeys([]); // This will clear the selected state
+    setSelectedKeys([]);
   };
+
   return (
     <>
       <Menu
@@ -80,6 +65,10 @@ const TopLevelMenu = () => {
           </Menu.Item>
         </Menu.SubMenu>
       </Menu>
+      <ModelWithInput
+        isModalVisible={showModal}
+        setIsModalVisible={setShowModal}
+      />
     </>
   );
 };

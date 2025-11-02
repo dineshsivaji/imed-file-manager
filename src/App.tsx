@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import './App.css';
-import Editor from '@monaco-editor/react';
-import TopLevelMenu from './components/ui/menu';
+import TopLevelMenu from './components/ui/TopLevelMenu';
+import DynamicMonacoEditor from './components/ui/DynamicMonacoEditor';
+
 function App() {
   const [greetMsg, setGreetMsg] = useState('');
   const [name, setName] = useState('');
@@ -37,13 +38,14 @@ function App() {
       </form> */}
       {/* <p>{greetMsg}</p> */}
       {/*<FileTree path="/Users/hgd469/Downloads" />*/}
-      <Editor
+      {/* <Editor
         height="90vh"
         defaultLanguage="json"
         value={code || ''}
         onChange={(v) => setCode(v ?? '')}
         theme="light"
-      />
+      /> */}
+      <DynamicMonacoEditor />
     </div>
   );
 }
