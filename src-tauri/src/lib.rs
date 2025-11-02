@@ -6,6 +6,7 @@ fn greet(name: &str) -> String {
 
 // Use the std::fs module for file system operations.
 use std::fs;
+use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 
 // The #[tauri::command] macro exposes this function to the frontend.
 #[tauri::command]
@@ -33,7 +34,6 @@ fn read_file_content(path: String) -> Result<String, String> {
 //         .map(|path| path.to_string_lossy().to_string())
 // }
 
-use tauri_plugin_dialog::DialogExt;
 #[tauri::command]
 async fn choose_and_read_file(app: tauri::AppHandle) -> Result<String, String> {
     // let file_path = app.dialog().file().blocking_pick_file().unwrap();
@@ -53,7 +53,14 @@ async fn choose_and_read_file(app: tauri::AppHandle) -> Result<String, String> {
 
             match std::fs::read_to_string(std_path_buf) {
                 Ok(data) => Ok(data),
-                Err(e) => Err(format!("Failed to read file: {}", e)),
+                Err(e) => {
+                    app.dialog()
+                        .message(e.to_string())
+                        .kind(MessageDialogKind::Error)
+                        .title("Error")
+                        .blocking_show();
+                    Err(format!("Failed to read file: {}", e))
+                }
             }
         }
         None => Err("No file selected".to_string()),

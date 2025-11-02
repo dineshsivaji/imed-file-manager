@@ -16,7 +16,7 @@ function App() {
   async function openFileDialog() {
     try {
       const content = await invoke<string | null>('choose_and_read_file');
-      console.log(content);
+      // console.log(content);
       setCode(content);
     } catch (error) {
       console.error('Error reading file:', error);
