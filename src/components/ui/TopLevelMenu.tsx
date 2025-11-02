@@ -11,14 +11,17 @@ import { Menu } from 'antd';
 import { useState } from 'react';
 
 import ModelWithInput from './ModelWithInput';
+import OkOnlyModal from './OkOnlyModal';
 
 const TopLevelMenu = () => {
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [showModal, setShowModal] = useState(false); // Modal visibility state
-
+  const [isAboutVisible, setIsAboutVisible] = useState(false);
   const handleMenuClick = (e: any) => {
     if (e.key === 'encryptionKey') {
       setShowModal(true); // Show modal when encryptionKey is clicked
+    } else if (e.key === 'about') {
+      setIsAboutVisible(true); // Show about modal
     }
     clearSelection();
   };
@@ -68,6 +71,10 @@ const TopLevelMenu = () => {
       <ModelWithInput
         isModalVisible={showModal}
         setIsModalVisible={setShowModal}
+      />
+      <OkOnlyModal
+        isModalVisible={isAboutVisible}
+        setIsModalVisible={setIsAboutVisible}
       />
     </>
   );

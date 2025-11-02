@@ -19,7 +19,7 @@ const ModalWithInput: React.FC<ModalWithInputProps> = ({
     try {
       const values = await form.validateFields();
       console.log('Received values of form: ', values);
-      message.success(`Input saved: "${values.newFolderName}"`);
+      message.success(`Input saved: "${values.encryptionKey}"`);
       setIsModalVisible(false);
       // form.resetFields();
     } catch (errorInfo) {
@@ -44,7 +44,7 @@ const ModalWithInput: React.FC<ModalWithInputProps> = ({
       >
         <Form form={form} layout="vertical" name="folder_input_form">
           <Form.Item
-            name="newFolderName"
+            name="encryptionKey"
             label=""
             rules={[
               {
