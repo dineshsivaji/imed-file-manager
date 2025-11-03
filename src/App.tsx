@@ -36,10 +36,14 @@ function App() {
       console.error('Error reading file:', error);
     }
   }
+  async function closeFile() {
+    setCode('');
+    setLanguage('');
+  }
 
   return (
     <div>
-      <TopLevelMenu onOpenFile={openFileDialog} />
+      <TopLevelMenu onOpenFile={openFileDialog} onCloseFile={closeFile} />
       {/* <form
         className="row"
         onSubmit={(e) => {

@@ -6,6 +6,16 @@ import {
   FileFilled,
   SaveFilled,
   LockFilled,
+  FileProtectOutlined,
+  FileOutlined,
+  SaveOutlined,
+  SaveTwoTone,
+  LockOutlined,
+  InfoCircleOutlined,
+  SettingOutlined,
+  QuestionCircleOutlined,
+  FolderOpenOutlined,
+  CloseCircleOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { useState } from 'react';
@@ -15,8 +25,12 @@ import OkOnlyModal from './OkOnlyModal';
 
 interface TopLevelMenuProps {
   onOpenFile: () => void;
+  onCloseFile: () => void;
 }
-const TopLevelMenu: React.FC<TopLevelMenuProps> = ({ onOpenFile }) => {
+const TopLevelMenu: React.FC<TopLevelMenuProps> = ({
+  onOpenFile,
+  onCloseFile,
+}) => {
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [showModal, setShowModal] = useState(false); // Modal visibility state
   const [isAboutVisible, setIsAboutVisible] = useState(false);
@@ -28,6 +42,9 @@ const TopLevelMenu: React.FC<TopLevelMenuProps> = ({ onOpenFile }) => {
       setIsAboutVisible(true); // Show about modal
     } else if (e.key === 'openPlain') {
       onOpenFile(); // Call the passed function to open file dialog
+    } else if (e.key === 'closed') {
+      // Handle close action here
+      onCloseFile();
     }
     clearSelection();
   };
@@ -46,36 +63,39 @@ const TopLevelMenu: React.FC<TopLevelMenuProps> = ({ onOpenFile }) => {
         <Menu.SubMenu
           key="FileSubMenu"
           title="File"
-          icon={<FolderOpenFilled />}
+          icon={<FolderOpenOutlined />}
         >
-          <Menu.Item key="openPlain" icon={<FileFilled />}>
+          <Menu.Item key="openPlain" icon={<FileOutlined />}>
             Open Plain File
           </Menu.Item>
-          <Menu.Item key="openEncrypted" icon={<FileFilled />}>
+          <Menu.Item key="openEncrypted" icon={<FileProtectOutlined />}>
             Open Encrypted File
           </Menu.Item>
-          <Menu.Item key="savePlain" icon={<SaveFilled />}>
+          <Menu.Item key="savePlain" icon={<SaveOutlined />}>
             Save As Plain File
           </Menu.Item>
-          <Menu.Item key="saveEncrypted" icon={<SaveFilled />}>
+          <Menu.Item key="saveEncrypted" icon={<SaveTwoTone />}>
             Save As Encrypted File
+          </Menu.Item>
+          <Menu.Item key="closed" icon={<CloseCircleOutlined />}>
+            Close
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
           key="SettingsSubMenu"
           title="Settings"
-          icon={<SettingFilled />}
+          icon={<SettingOutlined />}
         >
-          <Menu.Item key="encryptionKey" icon={<LockFilled />}>
+          <Menu.Item key="encryptionKey" icon={<LockOutlined />}>
             Encryption Key
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
           key="HelpSubMenu"
           title="Help"
-          icon={<QuestionCircleFilled />}
+          icon={<QuestionCircleOutlined />}
         >
-          <Menu.Item key="about" icon={<InfoCircleFilled />}>
+          <Menu.Item key="about" icon={<InfoCircleOutlined />}>
             About
           </Menu.Item>
         </Menu.SubMenu>
