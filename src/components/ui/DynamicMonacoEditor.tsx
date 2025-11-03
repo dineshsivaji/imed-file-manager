@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { Editor, useMonaco } from '@monaco-editor/react';
 // Note: If you're not using @monaco-editor/react, you'll need a similar
 // way to get the editor instance and the monaco object.
@@ -19,6 +19,10 @@ const DynamicMonacoEditor: React.FC<DynamicMonacoEditorProps> = ({
   const editorRef = useRef(null);
   const [currentLanguage, setCurrentLanguage] = useState('javascript');
 
+  // Update currentLanguage when language prop changes
+  useEffect(() => {
+    setCurrentLanguage(language);
+  }, [language]);
   // Callback to get the editor instance on mount
   const handleEditorDidMount = useCallback((editor: any, monaco: any) => {
     editorRef.current = editor;

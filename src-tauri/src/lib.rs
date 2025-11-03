@@ -38,6 +38,7 @@ fn read_file_content(path: String) -> Result<String, String> {
 struct FileReadResult {
     content: String,
     language: String,
+    file_name: String,
 }
 
 fn detect_language_from_filename(filename: &str) -> String {
@@ -71,15 +72,21 @@ async fn choose_and_read_file(app: tauri::AppHandle) -> Result<FileReadResult, S
     match file_path {
         Some(tauri_path_buf) => {
             let std_path_buf: std::path::PathBuf = tauri_path_buf.try_into().unwrap();
+
             let filename = std_path_buf
                 .file_name()
                 .and_then(|n| n.to_str())
                 .unwrap_or_default();
             let language = detect_language_from_filename(filename);
-            match std::fs::read_to_string(std_path_buf) {
+            match std::fs::read_to_string(std_path_buf.clone()) {
                 Ok(data) => Ok(FileReadResult {
                     content: data,
                     language: language,
+                    file_name: std_path_buf
+                        .canonicalize()
+                        .unwrap()
+                        .to_string_lossy()
+                        .to_string(),
                 }),
                 Err(e) => {
                     app.dialog()

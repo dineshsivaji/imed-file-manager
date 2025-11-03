@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api/core';
 import './App.css';
 import TopLevelMenu from './components/ui/TopLevelMenu';
 import DynamicMonacoEditor from './components/ui/DynamicMonacoEditor';
+import { getCurrentWindow } from '@tauri-apps/api/window';
 
 function App() {
   const [greetMsg, setGreetMsg] = useState('');
@@ -15,11 +16,22 @@ function App() {
     setGreetMsg(await invoke('read_file_content', { path: name }));
   }
 
+  // Function to update the title
+  async function updateAppTitle(newTitle: string) {
+    try {
+      const appWindow = getCurrentWindow();
+      await appWindow.setTitle(newTitle);
+      console.log(`Title updated to: ${newTitle}`);
+    } catch (error) {
+      console.error('Failed to set window title:', error);
+    }
+  }
   async function openFileDialog() {
     try {
       type FileReadResult = {
         content: string;
         language: string;
+        file_name: string;
       };
 
       const response = await invoke<FileReadResult | null>(
@@ -32,6 +44,7 @@ function App() {
       console.log(JSON.stringify(response));
       setCode(response.content);
       setLanguage(response.language);
+      updateAppTitle('imed-file-manager - ' + response.file_name);
     } catch (error) {
       console.error('Error reading file:', error);
     }
@@ -39,6 +52,7 @@ function App() {
   async function closeFile() {
     setCode('');
     setLanguage('');
+    updateAppTitle('imed-file-manager');
   }
 
   return (
