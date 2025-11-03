@@ -58,24 +58,6 @@ function App() {
   return (
     <div>
       <TopLevelMenu onOpenFile={openFileDialog} onCloseFile={closeFile} />
-      {/* <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          openFileDialog();
-        }}
-      >
-        <button type="submit">Open</button>
-      </form> */}
-      {/* <p>{greetMsg}</p> */}
-      {/*<FileTree path="/Users/hgd469/Downloads" />*/}
-      {/* <Editor
-        height="90vh"
-        defaultLanguage="json"
-        value={code || ''}
-        onChange={(v) => setCode(v ?? '')}
-        theme="light"
-      /> */}
       <DynamicMonacoEditor
         code={code || ''}
         setCode={setCode}

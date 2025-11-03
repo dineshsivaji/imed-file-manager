@@ -1,7 +1,5 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
-import { Editor, useMonaco } from '@monaco-editor/react';
-// Note: If you're not using @monaco-editor/react, you'll need a similar
-// way to get the editor instance and the monaco object.
+import { useEffect } from 'react';
+import { Editor } from '@monaco-editor/react';
 
 interface DynamicMonacoEditorProps {
   code: string;
@@ -9,67 +7,27 @@ interface DynamicMonacoEditorProps {
   language: string;
   setLanguage: (language: string) => void;
 }
+
 const DynamicMonacoEditor: React.FC<DynamicMonacoEditorProps> = ({
   code,
   setCode,
   language,
   setLanguage,
 }) => {
-  const monaco = useMonaco();
-  const editorRef = useRef(null);
-  const [currentLanguage, setCurrentLanguage] = useState('javascript');
-
   // Update currentLanguage when language prop changes
   useEffect(() => {
-    setCurrentLanguage(language);
+    setLanguage(language || 'plaintext');
   }, [language]);
-  // Callback to get the editor instance on mount
-  const handleEditorDidMount = useCallback((editor: any, monaco: any) => {
-    editorRef.current = editor;
-  }, []);
-
-  // Handler to change the language
-  interface ModelLike {}
-  interface EditorLike {
-    getModel: () => ModelLike | null;
-  }
-  interface MonacoLike {
-    editor: {
-      setModelLanguage: (model: ModelLike, language: string) => void;
-    };
-  }
-
-  const handleLanguageChange = (newLanguage: string) => {
-    if (monaco && editorRef.current) {
-      const model = (editorRef.current as unknown as EditorLike).getModel();
-      if (model) {
-        // This is the core function call
-        (monaco as unknown as MonacoLike).editor.setModelLanguage(
-          model,
-          newLanguage
-        );
-        setCurrentLanguage(newLanguage);
-      }
-    }
-  };
-
-  const languages = [
-    'javascript',
-    'typescript',
-    'json',
-    'html',
-    'css',
-    'python',
-  ];
 
   return (
     <Editor
       height="90vh"
-      language={currentLanguage}
+      language={language}
       value={code}
       options={{ selectOnLineNumbers: true }}
-      onChange={(v) => setCode(v ?? '')}
-      //   editorDidMount={handleEditorDidMount}
+      onChange={(v) => {
+        setCode(v ?? '');
+      }}
     />
   );
 };
