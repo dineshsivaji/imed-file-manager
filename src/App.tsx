@@ -8,6 +8,7 @@ function App() {
   const [greetMsg, setGreetMsg] = useState('');
   const [name, setName] = useState('');
   const [code, setCode] = useState<string | null>(''); // editor content state
+  const [language, setLanguage] = useState(''); // editor language state
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -16,9 +17,21 @@ function App() {
 
   async function openFileDialog() {
     try {
-      const content = await invoke<string | null>('choose_and_read_file');
-      // console.log(content);
-      setCode(content);
+      type FileReadResult = {
+        content: string;
+        language: string;
+      };
+
+      const response = await invoke<FileReadResult | null>(
+        'choose_and_read_file'
+      );
+      if (response === null) {
+        console.log('No file selected or file read error.');
+        return;
+      }
+      console.log(JSON.stringify(response));
+      setCode(response.content);
+      setLanguage(response.language);
     } catch (error) {
       console.error('Error reading file:', error);
     }
@@ -45,7 +58,12 @@ function App() {
         onChange={(v) => setCode(v ?? '')}
         theme="light"
       /> */}
-      <DynamicMonacoEditor code={code || ''} setCode={setCode} />
+      <DynamicMonacoEditor
+        code={code || ''}
+        setCode={setCode}
+        language={language}
+        setLanguage={setLanguage}
+      />
     </div>
   );
 }

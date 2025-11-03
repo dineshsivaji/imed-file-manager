@@ -1,18 +1,19 @@
 import { useRef, useState, useCallback } from 'react';
-import { Select, Space } from 'antd';
 import { Editor, useMonaco } from '@monaco-editor/react';
 // Note: If you're not using @monaco-editor/react, you'll need a similar
 // way to get the editor instance and the monaco object.
 
-const { Option } = Select;
-
 interface DynamicMonacoEditorProps {
   code: string;
   setCode: (code: string) => void;
+  language: string;
+  setLanguage: (language: string) => void;
 }
 const DynamicMonacoEditor: React.FC<DynamicMonacoEditorProps> = ({
   code,
   setCode,
+  language,
+  setLanguage,
 }) => {
   const monaco = useMonaco();
   const editorRef = useRef(null);

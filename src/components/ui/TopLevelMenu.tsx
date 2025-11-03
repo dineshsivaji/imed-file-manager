@@ -26,7 +26,7 @@ const TopLevelMenu: React.FC<TopLevelMenuProps> = ({ onOpenFile }) => {
       setShowModal(true); // Show modal when encryptionKey is clicked
     } else if (e.key === 'about') {
       setIsAboutVisible(true); // Show about modal
-    } else if (e.key === 'open') {
+    } else if (e.key === 'openPlain') {
       onOpenFile(); // Call the passed function to open file dialog
     }
     clearSelection();
@@ -48,11 +48,17 @@ const TopLevelMenu: React.FC<TopLevelMenuProps> = ({ onOpenFile }) => {
           title="File"
           icon={<FolderOpenFilled />}
         >
-          <Menu.Item key="open" icon={<FileFilled />}>
-            Open
+          <Menu.Item key="openPlain" icon={<FileFilled />}>
+            Open Plain File
           </Menu.Item>
-          <Menu.Item key="save" icon={<SaveFilled />}>
-            Save
+          <Menu.Item key="openEncrypted" icon={<FileFilled />}>
+            Open Encrypted File
+          </Menu.Item>
+          <Menu.Item key="savePlain" icon={<SaveFilled />}>
+            Save As Plain File
+          </Menu.Item>
+          <Menu.Item key="saveEncrypted" icon={<SaveFilled />}>
+            Save As Encrypted File
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu

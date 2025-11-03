@@ -5,6 +5,7 @@ fn greet(name: &str) -> String {
 }
 
 // Use the std::fs module for file system operations.
+use serde::Serialize;
 use std::fs;
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 
@@ -33,9 +34,29 @@ fn read_file_content(path: String) -> Result<String, String> {
 //         .await
 //         .map(|path| path.to_string_lossy().to_string())
 // }
+#[derive(Serialize)]
+struct FileReadResult {
+    content: String,
+    language: String,
+}
+
+fn detect_language_from_filename(filename: &str) -> String {
+    let ext = filename.split('.').last().unwrap_or("").to_lowercase();
+    match ext.as_str() {
+        "js" => "javascript",
+        "ts" => "typescript",
+        "json" => "json",
+        "html" => "html",
+        "css" => "css",
+        "py" => "python",
+        "xml" => "xml",
+        _ => "plaintext",
+    }
+    .to_string()
+}
 
 #[tauri::command]
-async fn choose_and_read_file(app: tauri::AppHandle) -> Result<String, String> {
+async fn choose_and_read_file(app: tauri::AppHandle) -> Result<FileReadResult, String> {
     // let file_path = app.dialog().file().blocking_pick_file().unwrap();
     // let file_path = app.dialog().file().pick_file(|file_path| {
     //     // return a file_path `Option`, or `None` if the user closes the dialog
@@ -50,9 +71,16 @@ async fn choose_and_read_file(app: tauri::AppHandle) -> Result<String, String> {
     match file_path {
         Some(tauri_path_buf) => {
             let std_path_buf: std::path::PathBuf = tauri_path_buf.try_into().unwrap();
-
+            let filename = std_path_buf
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or_default();
+            let language = detect_language_from_filename(filename);
             match std::fs::read_to_string(std_path_buf) {
-                Ok(data) => Ok(data),
+                Ok(data) => Ok(FileReadResult {
+                    content: data,
+                    language: language,
+                }),
                 Err(e) => {
                     app.dialog()
                         .message(e.to_string())
